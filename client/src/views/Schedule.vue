@@ -1,11 +1,11 @@
 <template>
     <div class="container min-h-screen mx-auto pb-8 px-4 space-y-4">
-        <div class="w-full space-y-4">
-            <div class="flex justify-between items-end">
-                <div class="flex space-x-4">
+        <div class="space-y-4">
+            <div class="flex justify-between">
+                <div class="flex space-x-2">
                     <div>
-                        <label for="instructors" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Sort by...</label>
-                        <select v-model="sortBy" id="instructors" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-max">
+                        <label for="instructors" class="block mb-2 text-xs xl:text-sm font-medium text-gray-900 dark:text-gray-400">Sort by...</label>
+                        <select v-model="sortBy" id="instructors" class="border text-xs xl:text-sm rounded-lg 0 block xl:px-5 xl:py-2.5 px-3 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 w-max">
                             <option>
                                 Instructors
                             </option>
@@ -15,23 +15,23 @@
                         </select>
                     </div>
                     <div v-if="sortBy == 'Instructors'">
-                        <label for="instructors" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Select an instructor</label>
-                        <select v-model="selectedInstructor" id="instructors" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-max">
+                        <label for="instructors" class="block mb-2 text-xs xl:text-sm font-medium text-gray-900 dark:text-gray-400">Select an instructor</label>
+                        <select v-model="selectedInstructor" id="instructors" class="border text-xs xl:text-sm rounded-lg 0 block xl:px-5 xl:py-2.5 px-3 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 w-max">
                             <option v-for="i, index in instructors" :key="index">
                                 {{i}}
                             </option>
                         </select>
                     </div>
                     <div v-if="sortBy == 'Rooms'">
-                        <label for="rooms" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Select a room</label>
-                        <select v-model="selectedRoom" id="rooms" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-max">
+                        <label for="rooms" class="block mb-2 text-xs xl:text-sm font-medium text-gray-900 dark:text-gray-400">Select a room</label>
+                        <select v-model="selectedRoom" id="rooms" class="border text-xs xl:text-sm rounded-lg 0 block xl:px-5 xl:py-2.5 px-3 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 w-max">
                             <option v-for="r, index in rooms" :key="index">
                                 {{r}}
                             </option>
                         </select>
                     </div>
                 </div>
-                <button @click="invokeSolver" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 h-max">
+                <button @click="invokeSolver" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs xl:text-sm xl:px-5 xl:py-2.5 px-3 py-1.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-max self-end">
                     Invoke Solver
                 </button>
             </div>

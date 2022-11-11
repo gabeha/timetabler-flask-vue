@@ -8,7 +8,7 @@
 
             <div class="text-xl text-white font-medium space-x-8">
                 <router-link to="/">
-                    Availabilities sdnksahdf
+                    Availabilities
                 </router-link>
     
                 <router-link to="/schedule">

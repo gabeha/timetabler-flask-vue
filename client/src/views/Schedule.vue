@@ -1,37 +1,47 @@
 <template>
     <div class="container min-h-screen mx-auto pb-8 px-4 space-y-4">
         <div class="w-full space-y-4">
-            <div class="flex space-x-4">
-                <div>
-                    <label for="instructors" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Sort by...</label>
-                    <select v-model="sortBy" id="instructors" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-max">
-                        <option>
-                            Instructors
-                        </option>
-                        <option>
-                            Rooms
-                        </option>
-                    </select>
+            <div class="flex justify-between items-end">
+                <div class="flex space-x-4">
+                    <div>
+                        <label for="instructors" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Sort by...</label>
+                        <select v-model="sortBy" id="instructors" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-max">
+                            <option>
+                                Instructors
+                            </option>
+                            <option>
+                                Rooms
+                            </option>
+                        </select>
+                    </div>
+                    <div v-if="sortBy == 'Instructors'">
+                        <label for="instructors" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Select an instructor</label>
+                        <select v-model="selectedInstructor" id="instructors" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-max">
+                            <option v-for="i, index in instructors" :key="index">
+                                {{i}}
+                            </option>
+                        </select>
+                    </div>
+                    <div v-if="sortBy == 'Rooms'">
+                        <label for="rooms" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Select a room</label>
+                        <select v-model="selectedRoom" id="rooms" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-max">
+                            <option v-for="r, index in rooms" :key="index">
+                                {{r}}
+                            </option>
+                        </select>
+                    </div>
                 </div>
-                <div v-if="sortBy == 'Instructors'">
-                    <label for="instructors" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Select an instructor</label>
-                    <select v-model="selectedInstructor" id="instructors" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-max">
-                        <option v-for="i, index in instructors" :key="index">
-                            {{i}}
-                        </option>
-                    </select>
-                </div>
-                <div v-if="sortBy == 'Rooms'">
-                    <label for="rooms" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Select a room</label>
-                    <select v-model="selectedRoom" id="rooms" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-max">
-                        <option v-for="r, index in rooms" :key="index">
-                            {{r}}
-                        </option>
-                    </select>
-                </div>
+                <button @click="invokeSolver" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 h-max">
+                    Invoke Solver
+                </button>
             </div>
             <ScheduleWeek v-if="sortBy == 'Instructors'" :modules="classesPerInstructor"></ScheduleWeek>
             <ScheduleWeek v-if="sortBy == 'Rooms'" :modules="classesPerRoom"></ScheduleWeek>
+        </div>
+        <div>
+            <LoadingModal v-model="showModal" :click-to-close="false">
+                <template v-slot:title>Solver is working</template>
+            </LoadingModal>
         </div>
     </div>
 </template>
@@ -42,6 +52,7 @@ import _, {keys} from 'underscore'
 
 
 import ScheduleWeek from '../components/ScheduleWeek.vue'
+import LoadingModal from '../components/LoadingModal.vue'
 
 
 export default {
@@ -68,10 +79,11 @@ export default {
                 'bg-rose-400',
                 'bg-fuchsia-400',
             ],
+            showModal: false
         }
     },
     components: {
-        ScheduleWeek,
+        ScheduleWeek, LoadingModal
     },
     async created() {
         await this.getSchedule()
@@ -101,6 +113,13 @@ export default {
                     console.error(error);
                 });
 
+        },
+        async invokeSolver() {
+            this.showModal = true
+            const path = 'http://localhost:5000/invoke';
+            const res = await axios.get(path)
+            await this.getSchedule()
+            this.showModal = false
         },
         fillInstructors() {
             let data = this.schedule
@@ -177,7 +196,7 @@ export default {
                     currCourse = arr[i].course_title
                 }
             }
-        }
+        },
     }
 }
 </script>

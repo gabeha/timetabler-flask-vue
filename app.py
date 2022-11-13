@@ -15,7 +15,7 @@ app.config.from_object(__name__)
 CORS(app, resources={r'/*': {'origins': '*'}})
 
 
-# retrive schedule
+# retrieve schedule
 @app.route('/schedule', methods=['GET'])
 def schedule():
     f = open('optimal_schedule.json')

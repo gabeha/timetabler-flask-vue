@@ -128,7 +128,6 @@ export default {
         fillRooms() {
             let data = this.schedule
             this.rooms = _.keys(_.countBy(data, function(data) { return data.room_name; }))
-            // console.log(this.rooms)
             this.rooms.sort()
         },
         sortByInstructor(name) {
@@ -144,7 +143,6 @@ export default {
                 return c.start_time = this.convertStartTime(c.start_time)
             })
 
-            console.log(this.classesPerInstructor)
             this.addColors(this.classesPerInstructor)
 
             this.classesPerInstructor.sort(function (a,b) {

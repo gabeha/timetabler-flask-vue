@@ -11,6 +11,7 @@ class Schedule:
         self._data = data
         self._classes = []
         self._num_of_conflicts = 0
+        self._type_of_conflicts = []
         self._fitness = -1
         self._num_of_classes = 0
         self._is_fitness_changed = True
@@ -21,6 +22,9 @@ class Schedule:
 
     def get_num_of_conflicts(self):
         return self._num_of_conflicts
+
+    def get_type_of_conflicts(self):
+        return self._type_of_conflicts
 
     def get_fitness(self):
         if self._is_fitness_changed:
@@ -53,12 +57,17 @@ class Schedule:
         return self
 
     def calculate_fitness(self):
+        self._type_of_conflicts = []
         self._num_of_conflicts = 0
         classes = self.get_classes()
+
+        temp = []
+
         for i in range(0, len(classes)):
             # punishes any class that ends after 19:45
             if (classes[i].get_start_time().get_start_time() + classes[i].get_duration()) > 705:
                 self._num_of_conflicts += 1
+                temp.append('late end')
 
             for j in range(0, len(classes)):
                 if j >= i:
@@ -76,10 +85,12 @@ class Schedule:
                         # punishes two classes given at overlapping times in the same room
                         if classes[i].get_room().get_id() == classes[j].get_room().get_id():
                             self._num_of_conflicts += 1
+                            temp.append('same room overlap')
 
                         # punishes two classes given at overlapping times given by the same instructor
                         if classes[i].get_instructor().get_id() == classes[j].get_instructor().get_id():
                             self._num_of_conflicts += 1
+                            temp.append('same instructor overlap')
 
 
                     if classes[i].get_module().get_name() == classes[j].get_module().get_name() and classes[i].get_id() != classes[j].get_id():
@@ -90,17 +101,20 @@ class Schedule:
                         if (type_i == 'L' and type_j == 'T' and day_i > day_j) or (
                                 type_j == 'L' and type_i == 'T' and day_j > day_i):
                             self._num_of_conflicts += 1
+                            temp.append('tut before lec in week')
 
                         # punishes tutorial before lecture on the day
                         if (type_i == 'L' and type_j == 'T' and start_i > start_j and day_i == day_j) or (
                                 type_j == 'L' and type_i == 'T' and start_j > start_i and day_j == day_i):
                             self._num_of_conflicts += 1
+                            temp.append('tut before lec on day')
 
                         # punishes two tutorials of the same module on the same day
                         if type_i == 'T' and type_j == 'T':
                             if day_i == day_j:
                                 self._num_of_conflicts += 1
-
+                                temp.append('two tuts same day')
+        self._type_of_conflicts.append(temp)
         return 1 / (1.0 * self._num_of_conflicts + 1)
 
     def __str__(self):

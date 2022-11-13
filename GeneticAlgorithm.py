@@ -12,13 +12,13 @@ from insert_values_db import insert_schedules
 # 20, 2, 5, 0.1 => 13sec
 # 30, 3, 7, 0.1 => 13sec
 
-POPULATION_SIZE = 20
+POPULATION_SIZE = 50
 NUMB_OF_ELITE_SCHEDULES = 2
 TOURNAMENT_SELECTION_SIZE = 5
-MUTATION_RATE = 0.1
+MUTATION_RATE = 0.01
 
 
-class GeneticAlgorithm():
+class GeneticAlgorithm:
 
     def __init__(self, data):
         self._data = data

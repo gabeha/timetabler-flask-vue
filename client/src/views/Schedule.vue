@@ -4,8 +4,8 @@
             <div class="flex justify-between">
                 <div class="flex space-x-2">
                     <div>
-                        <label for="instructors" class="block mb-2 text-xs xl:text-sm font-medium text-gray-900 dark:text-gray-400">Sort by...</label>
-                        <select v-model="sortBy" id="instructors" class="border text-xs xl:text-sm rounded-lg 0 block xl:px-5 xl:py-2.5 px-3 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 w-max">
+                        <label for="choose" class="block mb-2 text-xs xl:text-sm font-medium text-gray-900 dark:text-gray-400">Sort by...</label>
+                        <select v-model="sortBy" id="choose" class="border text-xs xl:text-sm rounded-lg 0 block xl:px-5 xl:py-2.5 px-3 py-1.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 w-max">
                             <option>
                                 Instructors
                             </option>
@@ -65,7 +65,7 @@ export default {
             instructors: [],
             rooms: [],
             modules: [],
-            selectedInstructor: 'Gideon Koekok',
+            selectedInstructor: 'Jessica Nelson',
             selectedRoom: 'B.001',
             sortBy: 'Instructors',
             colors: [
@@ -144,6 +144,7 @@ export default {
                 return c.start_time = this.convertStartTime(c.start_time)
             })
 
+            console.log(this.classesPerInstructor)
             this.addColors(this.classesPerInstructor)
 
             this.classesPerInstructor.sort(function (a,b) {

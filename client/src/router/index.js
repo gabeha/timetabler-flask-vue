@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Index from "../views/Index.vue";
 import Schedule from "../views/Schedule.vue"
+import InsertValues from '../views/InsertValues.vue'
 
 
 const router = createRouter({
@@ -15,6 +16,11 @@ const router = createRouter({
       path: "/schedule",
       name: "schedule",
       component: Schedule,
+    },
+    {
+      path: "/insert",
+      name: "insert",
+      component: InsertValues,
     },
   ],
 });

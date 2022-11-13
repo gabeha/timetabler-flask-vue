@@ -3,66 +3,90 @@ import sqlite3
 import collections
 
 def insert_modules():
-    course = [6, 4, 4]
-    practical = [28]
-    course_duration = json.dumps(course)
-    practical_duration = json.dumps(practical)
-    modules = [
-        [1, 'L', 'PHY3002', 3000, 6],
-        [2, 'T', 'PHY3002', 3000, 6],
-        [3, 'T', 'PHY3002', 3000, 6],
-        [4, 'L', 'PHY3006', 1000, 6],
-        [5, 'T', 'PHY3006', 1000, 6],
-        [6, 'T', 'PHY3006', 1000, 6],
-        [7, 'L', 'PHY3007', 1000, 6],
-        [8, 'T', 'PHY3007', 1000, 6],
-        [9, 'T', 'PHY3007', 1000, 6],
+    courses = ['BIO2003', 'CHE2001', 'INT1003', 'INT3010', 'HUM2051', 'BIO2005', 'BIO2010',
+               'MAT2008', 'MAT2006', 'PHY3005', 'BIO2007', 'CHE1101', 'INT2010', 'NEU1001',
+               'PHY2002', 'BIO2001', 'CHE3009', 'INT3003', 'PHY2008', 'PHY3008', 'SCI2031',
+               'BIO3010', 'INT3008', 'INT1007', 'PHY1101', 'PHY2004', 'PRA1101', 'PRA1005',
+               'PRA2002', 'PRA2008', 'PRA2011', 'PRA2014', 'PRA2022', 'PRA3012', 'PRA3014',
+               'PRA3017', 'PRA3020', 'PRA3024']
 
-        [10, 'L', 'BIO2003', 2000, 6],
-        [11, 'T', 'BIO2003', 2000, 6],
-        [12, 'T', 'BIO2003', 2000, 6],
-        [13, 'L', 'BIO3007', 3000, 6],
-        [14, 'T', 'BIO3007', 3000, 6],
-        [15, 'T', 'BIO3007', 3000, 6],
-        [16, 'P', 'PRA2011', 2000, 28],
-        [17, 'P', 'PRA3011', 2000, 28],
+    types = ['L', 'T', 'T']
+    modules = []
 
-        [18, 'L', 'CHE2003', 2000, 6],
-        [19, 'T', 'CHE2003', 2000, 6],
-        [20, 'T', 'CHE2003', 2000, 6],
-        [21, 'L', 'CHE3006', 3000, 6],
-        [22, 'T', 'CHE3006', 3000, 6],
-        [23, 'T', 'CHE3006', 3000, 6],
-        [24, 'L', 'CHE3007', 3000, 6],
-        [25, 'T', 'CHE3007', 3000, 6],
-        [26, 'T', 'CHE3007', 3000, 6],
-        [27, 'P', 'PRA2008', 2000, 28],
-        [28, 'P', 'PRA3018', 3000, 28],
-    ]
+    for i in range(len(courses)):
+        for j in range(3):
+            level = 0
+            if courses[i][3] == '1':
+                level = 1000
+            elif courses[i][3] == '2':
+                level = 2000
+            elif courses[i][3] == '3':
+                level = 3000
+
+            if courses[i][0:3] != 'PRA':
+                temp = [types[j], courses[i], level, 6]
+                modules.append(temp)
+
+        if courses[i][0:3] == 'PRA':
+            level = 0
+            if courses[i][3] == '1':
+                level = 1000
+            elif courses[i][3] == '2':
+                level = 2000
+            elif courses[i][3] == '3':
+                level = 3000
+            temp = ['P', courses[i], level, 28]
+            modules.append(temp)
+
     cur.execute("DROP TABLE IF EXISTS modules")
-    cur.execute("CREATE TABLE modules (id integer, type text, name text, level int, duration int)")
+    cur.execute("CREATE TABLE modules (id integer primary key, type text, name text, level int, duration int)")
 
     for i in range(len(modules)):
-        cur.execute("INSERT INTO modules (id, type, name, level, duration) VALUES (?,?,?,?,?)",
-                    (modules[i][0], modules[i][1], modules[i][2], modules[i][3], modules[i][4]))
-
+        cur.execute("INSERT INTO modules (type, name, level, duration) VALUES (?,?,?,?)",
+                    (modules[i][0], modules[i][1], modules[i][2], modules[i][3]))
 
 def insert_instructors():
-    instructors = [
-        [1, 'Gideon Koekok', json.dumps([1, 2, 3, 4, 5, 6, 7, 8, 9])],
-        # [1, 'Gideon Koekok', json.dumps([1, 2, 3])],
-        [2, 'Roy Erkens', json.dumps([10, 11, 12, 13, 14, 15, 16, 17])],
-        # [2, 'Roy Erkens', json.dumps([10, 11, 12])],
-        [3, 'Veaceslav Vieru', json.dumps([18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28])]
-        # [3, 'Veaceslav Vieru', json.dumps([18, 19, 20])]
-    ]
 
     cur.execute("DROP TABLE IF EXISTS instructors")
-    cur.execute("CREATE TABLE instructors (id integer, name text, modules_taught text)")
+    instructors = [
+        ['Jessica Nelson', json.dumps([1, 2, 3, 83])],
+        ['Hanne Dilien', json.dumps([4, 5, 6, 81])],
+        ['Federico De Martino', json.dumps([7, 8, 9])],
+        ['Vivian van Saaze', json.dumps([10, 11, 12])],
+        ['Patricia de Vries', json.dumps([13, 14, 15])],
+        ['Linnea van Griethuijsen', json.dumps([16, 17, 18])],
+        ['Aaron Isaacs', json.dumps([19, 20, 21])],
+        ['Claire Blackman', json.dumps([22, 23, 24, 73, 74, 75])],
+        ['Otti dHuys', json.dumps([25, 26, 27])],
+        ['Stefan Danilishin', json.dumps([28, 29, 30])],
+        ['Leon de Windt', json.dumps([31, 32, 33])],
+        ['Chris Bahn', json.dumps([34, 35, 36, 87])],
+        ['Ian Anthony', json.dumps([37, 38, 39])],
+        ['Laurence de Nijs', json.dumps([40, 41, 42])],
+        ['Jessica Steinlechner', json.dumps([43, 44, 45])],
+        ['Martijn van Griensven', json.dumps([46, 47, 48, 88])],
+        ['Giuditta Perversi', json.dumps([49, 50, 51, 89])],
+        ['Carlos Mota', json.dumps([52, 53, 54])],
+        ['Chad Ellington', json.dumps([55, 56, 57])],
+        ['Lorenzo Reverberi', json.dumps([58, 59, 60])],
+        ['K. Wouters', json.dumps([61, 62, 63])],
+        ['Maarten Honing', json.dumps([64, 65, 66])],
+        ['Lorenzo Moroni', json.dumps([67, 68, 69])],
+        ['Jesse Hennekam', json.dumps([70, 71, 72])],
+        ['Benedikt Poser', json.dumps([76, 77, 78])],
+        ['Chris Pawley', json.dumps([79])],
+        ['Mark Roberts', json.dumps([80])],
+        ['Slava Vieru', json.dumps([82])],
+        ['Serve Olieslagers', json.dumps([84])],
+        ['Pim Martens', json.dumps([85])],
+        ['Bart van Grinsven', json.dumps([86])],
+        ['Jacco de Vries', json.dumps([90])],
+    ]
+    cur.execute("CREATE TABLE instructors (id integer primary key, name text, modules_taught text)")
 
     for i in range(len(instructors)):
-        cur.execute("INSERT INTO instructors (id, name, modules_taught) VALUES (?,?,?)",
-                    (instructors[i][0], instructors[i][1], instructors[i][2]))
+        cur.execute("INSERT INTO instructors (name, modules_taught) VALUES (?,?)",
+                    (instructors[i][0], instructors[i][1]))
 
 
 def insert_rooms():
@@ -72,6 +96,31 @@ def insert_rooms():
         [3, 'B.003', 50],
         [4, 'B.004', 50],
         [5, 'B.005', 50],
+        [6, 'B.006', 50],
+        [7, 'B.007', 50],
+        [8, 'B.008', 50],
+        [9, 'B.009', 50],
+        [10, 'B.010', 50],
+        [11, 'B.011', 50],
+        [12, 'B.012', 50],
+        [13, 'B.013', 50],
+        [14, 'B.014', 50],
+        [15, 'B.015', 50],
+        [16, 'B.016', 50],
+        [17, 'B.017', 50],
+        [18, 'B.018', 50],
+        [19, 'B.019', 50],
+        [20, 'B.020', 50],
+        [21, 'B.021', 50],
+        [22, 'B.022', 50],
+        [23, 'B.023', 50],
+        [24, 'B.024', 50],
+        [25, 'B.025', 50],
+        [26, 'B.026', 50],
+        [27, 'B.027', 50],
+        [28, 'B.028', 50],
+        [29, 'B.029', 50],
+        [30, 'B.030', 50],
     ]
 
     cur.execute("DROP TABLE IF EXISTS rooms")

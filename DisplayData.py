@@ -66,10 +66,10 @@ class DisplayData:
 
     def print_generation(self, population):
         table1 = prettytable.PrettyTable(
-            ['schedule #', 'fitness', '# of conflicts'])
+            ['schedule #', 'fitness', '# of conflicts', 'type of conflicts'])
         schedules = population.get_schedules()
-        for i in range(0, len(schedules)):
-            table1.add_row([str(i), round(schedules[i].get_fitness(), 3), schedules[i].get_num_of_conflicts()])
+        for i in range(0, 1):
+            table1.add_row([str(i), round(schedules[i].get_fitness(), 3), schedules[i].get_num_of_conflicts(), schedules[i].get_type_of_conflicts()])
         print(table1)
 
     def print_schedule_as_table(self, schedule):

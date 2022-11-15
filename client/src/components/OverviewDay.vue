@@ -74,7 +74,7 @@ export default {
                 let subject = m.course_title.substring(0,3)
                 let div = document.createElement("td")
                 let p = document.createElement("p")
-                let text = `${m.course_title} \n ${m.instructor_name} \n ${m.room_name} \n ${this.convertTime(m.start_time_id-1)} - ${this.convertTime(m.end_time_id)}`
+                let text = `${m.course_title} \n ${m.instructor_name} \n ${m.course_type} \n ${m.room_name} \n ${this.convertTime(m.start_time_id-1)} - ${this.convertTime(m.end_time_id)}`
                 p.innerText = text
                 if(m.course_type != 'P') {
                     div.rowSpan = "7"

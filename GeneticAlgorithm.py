@@ -15,7 +15,7 @@ from insert_values_db import insert_schedules
 POPULATION_SIZE = 50
 NUMB_OF_ELITE_SCHEDULES = 2
 TOURNAMENT_SELECTION_SIZE = 5
-MUTATION_RATE = 0.01
+MUTATION_RATE = 0.005
 
 
 class GeneticAlgorithm:

@@ -28,7 +28,7 @@ def create_schedule():
         population = geneticAlgorithm.evolve(population)
         population.get_schedules().sort(key=lambda x: x.get_fitness(), reverse=True)
         displayMgr.print_generation(population)
-        if generationNumber == 1000:
+        if generationNumber == 200:
             break
     print("\n\n")
     print("--- %.2f seconds ---" % (time.time() - start_time))

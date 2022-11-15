@@ -12,6 +12,9 @@
                             <option>
                                 Rooms
                             </option>
+                            <option>
+                                Time
+                            </option>
                         </select>
                     </div>
                     <div v-if="sortBy == 'Instructors'">
@@ -37,6 +40,7 @@
             </div>
             <ScheduleWeek v-if="sortBy == 'Instructors'" :modules="classesPerInstructor"></ScheduleWeek>
             <ScheduleWeek v-if="sortBy == 'Rooms'" :modules="classesPerRoom"></ScheduleWeek>
+            <ScheduleOverview v-if="sortBy == 'Time'" :modules="overview"></ScheduleOverview>
         </div>
         <div>
             <LoadingModal v-model="showModal" :click-to-close="false">
@@ -52,6 +56,7 @@ import _, {keys} from 'underscore'
 
 
 import ScheduleWeek from '../components/ScheduleWeek.vue'
+import ScheduleOverview from '../components/ScheduleOverview.vue';
 import LoadingModal from '../components/LoadingModal.vue'
 
 
@@ -62,6 +67,7 @@ export default {
             schedule: [],
             classesPerInstructor: [],
             classesPerRoom: [],
+            overview: [],
             instructors: [],
             rooms: [],
             modules: [],
@@ -83,7 +89,7 @@ export default {
         }
     },
     components: {
-        ScheduleWeek, LoadingModal
+        ScheduleWeek, LoadingModal, ScheduleOverview
     },
     async created() {
         await this.getSchedule()
@@ -108,6 +114,7 @@ export default {
                     this.fillRooms()
                     this.sortByInstructor(this.selectedInstructor)
                     this.sortByRoom(this.selectedRoom)
+                    this.prepareOverview()
                 })
                 .catch((error) => {
                     console.error(error);
@@ -130,6 +137,19 @@ export default {
             this.rooms = _.keys(_.countBy(data, function(data) { return data.room_name; }))
             this.rooms.sort()
         },
+
+        prepareOverview() {
+            this.overview = this.schedule.map(c => ({...c}))
+
+            this.overview.forEach((c) => {
+                return c.end_time_id = (c.start_time + c.duration)/15
+            })
+
+            this.overview.sort(function (a,b) {
+                return a.start_time - b.start_time
+            })
+        },
+
         sortByInstructor(name) {
             this.classesPerInstructor = this.schedule.filter((c) => {
                 return (c.instructor_name == name)
